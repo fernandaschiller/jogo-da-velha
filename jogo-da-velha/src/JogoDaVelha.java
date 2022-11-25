@@ -47,10 +47,8 @@ public class JogoDaVelha {
 
             if (grade[linha][coluna].equalsIgnoreCase("   ")) {
                 grade[linha][coluna] = simbolo;
-            } else {
-                System.out.println("Escolha a posição novamente: ");
-                throw new Exception();
             }
+
         } catch (Exception e) {
             desenhaGrade(grade);
             Scanner input = new Scanner(System.in);
