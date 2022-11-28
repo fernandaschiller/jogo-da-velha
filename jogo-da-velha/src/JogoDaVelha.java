@@ -31,7 +31,7 @@ public class JogoDaVelha {
         }
     }
 
-    public static String[][] desenhaSimboloNaGrade (String[][]grade, int linha, int coluna, String simbolo) {
+    public static String[][] desenhaSimboloNaGrade(String[][] grade, int linha, int coluna, String simbolo) {
 
         try {
 
@@ -64,77 +64,126 @@ public class JogoDaVelha {
         return grade;
     }
 
-    public static boolean verificaGanhador(String[][] grade, String simbolo) {
+    public static boolean verificaGanhador(String[][] grade, String simbolo) { //alterar para hasGanhador que é uma convenção do java
 
         if (grade[0][0].contains(simbolo) && grade[0][1].contains(simbolo) && grade[0][2].contains(simbolo)) {
-            System.out.println("Jogador " + simbolo + " ganhou"); // linha
+            System.out.println("Jogador " + simbolo + " ganhou a jogada"); // linha
             return true;
-        } else if (grade[1][0].contains(simbolo) && grade[1][1].contains(simbolo) && grade[1][2].contains(simbolo)){
-            System.out.println("Jogador " + simbolo + " ganhou"); // linha
+        } else if (grade[1][0].contains(simbolo) && grade[1][1].contains(simbolo) && grade[1][2].contains(simbolo)) {
+            System.out.println("Jogador " + simbolo + " ganhou a jogada"); // linha
             return true;
         } else if (grade[2][0].contains(simbolo) && grade[2][1].contains(simbolo) && grade[2][2].contains(simbolo)) {
-            System.out.println("Jogador " + simbolo + " ganhou"); // linha
+            System.out.println("Jogador " + simbolo + " ganhou a jogada"); // linha
             return true;
         } else if (grade[0][0].contains(simbolo) && grade[1][0].contains(simbolo) && grade[2][0].contains(simbolo)) {
-            System.out.println("Jogador " + simbolo + " ganhou"); // coluna
+            System.out.println("Jogador " + simbolo + " ganhou a jogada"); // coluna
             return true;
         } else if (grade[0][1].contains(simbolo) && grade[1][1].contains(simbolo) && grade[2][1].contains(simbolo)) {
-            System.out.println("Jogador " + simbolo + " ganhou"); // coluna
+            System.out.println("Jogador " + simbolo + " ganhou a jogada"); // coluna
             return true;
         } else if (grade[0][2].contains(simbolo) && grade[1][2].contains(simbolo) && grade[2][2].contains(simbolo)) {
-            System.out.println("Jogador " + simbolo + " ganhou"); // coluna
+            System.out.println("Jogador " + simbolo + " ganhou a jogada"); // coluna
             return true;
         } else if (grade[0][0].contains(simbolo) && grade[1][1].contains(simbolo) && grade[2][2].contains(simbolo)) {
-            System.out.println("Jogador " + simbolo + " ganhou"); // diagonal 1
+            System.out.println("Jogador " + simbolo + " ganhou a jogada"); // diagonal 1
             return true;
         } else if (grade[0][2].contains(simbolo) && grade[1][1].contains(simbolo) && grade[2][0].contains(simbolo)) {
-            System.out.println("Jogador " + simbolo + " ganhou"); // diagonal 2
+            System.out.println("Jogador " + simbolo + " ganhou a jogada"); // diagonal 2
             return true;
         }
         return false;
     }
 
-    public static void main(String[] args) {
+    public static int numeroRodadas() {
+        Scanner input = new Scanner(System.in);
+        int numeroRodadas = 0;
+
+        System.out.println("Informe o número de rodadas que você quer jogar: ");
+
+        try {
+            numeroRodadas = input.nextInt();
+            if (numeroRodadas >= 1) {
+                return numeroRodadas;
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            System.out.println("Número de rodadas inválido.");
+            numeroRodadas = numeroRodadas();
+        }
+        return numeroRodadas;
+    }
+
+    public static void main(String[] args) { // faz a interação com o jogador
+
         Scanner input = new Scanner(System.in);
         System.out.println("Jogo da Velha");
 
-        int numeroJogadas = 0;
-        String simbolo = " X ";
-        boolean existeGanhador = false;
+        int numeroRodadas = numeroRodadas();
+        int vitoriasX = 0;
+        int vitoriasO = 0;
 
-        String[][] grade = inicializaGrade();
-        desenhaGrade(grade);
+        while (numeroRodadas >= 1) {
+            int numeroJogadas = 0;
+            String simbolo = " X ";
+            boolean existeGanhador = false;
 
-        while (numeroJogadas < 9 && !existeGanhador)  {
-            System.out.println("Jogada " + (numeroJogadas+1));
-
-            System.out.println("É a vez do jogador" + simbolo);
-
-            System.out.println("Indique a posição escolhida: ");
-            System.out.println("Linha: ");
-            int linha = input.nextInt();
-            System.out.println("Coluna: ");
-            int coluna = input.nextInt();
-            System.out.println("Linha: " + linha);
-            System.out.println("Coluna: " + coluna);
-
-            grade = desenhaSimboloNaGrade(grade, linha, coluna, simbolo);
-
+            String[][] grade = inicializaGrade();
             desenhaGrade(grade);
 
-            existeGanhador = verificaGanhador(grade, simbolo);
+            while (numeroJogadas < 9 && !existeGanhador) {
+                System.out.println("Jogada " + (numeroJogadas + 1));
 
-            if (simbolo.equalsIgnoreCase(" x ")){
-                simbolo = " O ";
-            } else {
-                simbolo = " X ";
+                System.out.println("É a vez do jogador" + simbolo);
+
+                System.out.println("Indique a posição escolhida: ");
+                System.out.println("Linha: ");
+                int linha = input.nextInt();
+                System.out.println("Coluna: ");
+                int coluna = input.nextInt();
+                System.out.println("Linha: " + linha);
+                System.out.println("Coluna: " + coluna);
+
+                grade = desenhaSimboloNaGrade(grade, linha, coluna, simbolo);
+
+                desenhaGrade(grade);
+
+                existeGanhador = verificaGanhador(grade, simbolo);
+
+                if (existeGanhador) {
+                    if (simbolo.equals(" X ")) {
+                        vitoriasX++;
+                    } else {
+                        vitoriasO++;
+                    }
+                }
+
+                if (simbolo.equalsIgnoreCase(" x ")) {
+                    simbolo = " O ";
+                } else {
+                    simbolo = " X ";
+                }
+
+                numeroJogadas++;
+
+            }
+            if (!existeGanhador) {
+                System.out.println("Empatou a jogada!");
             }
 
-            numeroJogadas++;
-        }
+            numeroRodadas--;
 
-        if (!existeGanhador){
-            System.out.println("Empatou!");
+            if (numeroRodadas == 0) {
+                if (vitoriasX > vitoriasO) {
+                    System.out.println("Jogador X ganhou");
+                } else if (vitoriasX < vitoriasO) {
+                    System.out.println("Jogador O ganhou");
+                } else {
+                    System.out.println("O jogo empatou.");
+                    System.out.println("Iniciando rodada final...");
+                    numeroRodadas++;
+                }
+            }
         }
     }
 }
